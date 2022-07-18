@@ -456,6 +456,10 @@ local function setup(args)
       end
     end
 
+    io.write("[press ENTER to continue]")
+    io.flush()
+    _ = io.read()
+
     if not args.keep_selection then
       return {
         "UnSelectAll",
