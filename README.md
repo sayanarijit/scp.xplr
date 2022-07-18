@@ -2,6 +2,8 @@
 
 Integrate xplr with scp
 
+https://user-images.githubusercontent.com/11632726/179583514-b3e5ac32-1b60-43b1-88b3-cd420cd00371.mp4
+
 ## Requirements
 
 - scp
