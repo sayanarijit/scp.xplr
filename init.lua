@@ -44,17 +44,17 @@ local function count_destinations()
   return count
 end
 
-local function format_line(index)
-  local host = state.hosts[index]
-  local dest = state.destinations[index]
-  if index == state.cursor and dest then
-    return "█" .. " " .. host .. ":" .. quote(dest)
-  elseif index == state.cursor then
-    return "▌" .. " " .. host
+local function format_line(num)
+  local host = state.hosts[num]
+  local dest = state.destinations[num]
+  if num == state.cursor and dest then
+    return "█ " .. num .. ". " .. host .. ":" .. quote(dest)
+  elseif num == state.cursor then
+    return "▌ " .. num .. ". " .. host
   elseif dest then
-    return "▐" .. " " .. host .. ":" .. quote(dest)
+    return "▐ " .. num .. ". " .. host .. ":" .. quote(dest)
   else
-    return " " .. " " .. host
+    return "  " .. num .. ". " .. host
   end
 end
 
@@ -135,6 +135,18 @@ local function setup(args)
             { CallLuaSilently = "custom.scp.go_down" },
           },
         },
+        g = {
+          help = "go to top",
+          messages = {
+            { CallLuaSilently = "custom.scp.go_top" },
+          },
+        },
+        G = {
+          help = "go to bottom",
+          messages = {
+            { CallLuaSilently = "custom.scp.go_bottom" },
+          },
+        },
         space = {
           help = "toggle select",
           messages = {
@@ -172,6 +184,12 @@ local function setup(args)
           },
         },
       },
+      on_number = {
+        messages = {
+          { SwitchModeCustom = "scp_goto_number" },
+          "UpdateInputBufferFromKey",
+        },
+      },
     },
   }
 
@@ -183,6 +201,56 @@ local function setup(args)
 
   xplr.config.modes.custom.scp_select_host.key_bindings.on_key[":"] =
     xplr.config.modes.custom.scp_select_host.key_bindings.on_key.space
+
+  xplr.config.modes.custom.scp_goto_number = {
+    name = "go to number",
+    layout = hijack_table(xplr.config.layouts.builtin.default),
+    key_bindings = {
+      on_key = {
+        enter = {
+          messages = {
+            { CallLuaSilently = "custom.scp.go_to_number" },
+            "PopMode",
+          },
+        },
+        up = {
+          messages = {
+            { CallLuaSilently = "custom.scp.go_up_number" },
+            "PopMode",
+          },
+        },
+        down = {
+          messages = {
+            { CallLuaSilently = "custom.scp.go_down_number" },
+            "PopMode",
+          },
+        },
+        esc = {
+          messages = {
+            "PopMode",
+          },
+        },
+        ["ctrl-c"] = {
+          messages = {
+            "Terminate",
+          },
+        },
+      },
+      on_number = {
+        messages = {
+          "UpdateInputBufferFromKey",
+        },
+      },
+      on_navigation = {
+        messages = {
+          "UpdateInputBufferFromKey",
+        },
+      },
+      default = {
+        messages = {},
+      },
+    },
+  }
 
   xplr.config.modes.custom.scp_add_host = {
     name = "add host",
@@ -318,6 +386,32 @@ local function setup(args)
     else
       state.cursor = state.cursor + 1
     end
+  end
+
+  xplr.fn.custom.scp.go_to_number = function(app)
+    if app.input_buffer and #app.input_buffer ~= 0 then
+      state.cursor = tonumber(app.input_buffer)
+    end
+  end
+
+  xplr.fn.custom.scp.go_up_number = function(app)
+    if app.input_buffer and #app.input_buffer ~= 0 then
+      state.cursor = math.max(1, state.cursor - tonumber(app.input_buffer))
+    end
+  end
+
+  xplr.fn.custom.scp.go_down_number = function(app)
+    if app.input_buffer and #app.input_buffer ~= 0 then
+      state.cursor = math.min(#state.hosts, state.cursor + tonumber(app.input_buffer))
+    end
+  end
+
+  xplr.fn.custom.scp.go_top = function(_)
+    state.cursor = 1
+  end
+
+  xplr.fn.custom.scp.go_bottom = function(_)
+    state.cursor = #state.hosts
   end
 
   xplr.fn.custom.scp.toggle_select = function(_)

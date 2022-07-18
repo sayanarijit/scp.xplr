@@ -56,3 +56,4 @@ https://user-images.githubusercontent.com/11632726/179600312-845a698d-2c68-4646-
 - Send multiple files to multiple hosts
 - Reads ssh config to find predefined hosts
 - Toggle select all hosts using `ctrl-a`
+- Navigate host list using numbers
