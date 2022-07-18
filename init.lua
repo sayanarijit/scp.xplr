@@ -185,6 +185,7 @@ local function setup(args)
         },
       },
       on_number = {
+        help = "to number",
         messages = {
           { SwitchModeCustom = "scp_goto_number" },
           "UpdateInputBufferFromKey",
@@ -208,18 +209,21 @@ local function setup(args)
     key_bindings = {
       on_key = {
         enter = {
+          help = "go",
           messages = {
             { CallLuaSilently = "custom.scp.go_to_number" },
             "PopMode",
           },
         },
         up = {
+          help = "go up",
           messages = {
             { CallLuaSilently = "custom.scp.go_up_number" },
             "PopMode",
           },
         },
         down = {
+          help = "go down",
           messages = {
             { CallLuaSilently = "custom.scp.go_down_number" },
             "PopMode",
@@ -258,6 +262,7 @@ local function setup(args)
     key_bindings = {
       on_key = {
         enter = {
+          help = "submit",
           messages = {
             { CallLuaSilently = "custom.scp.add_host" },
           },
