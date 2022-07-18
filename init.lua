@@ -326,7 +326,6 @@ local function setup(args)
       state.destinations[state.cursor] = nil
     else
       state.dest_hist_cursor = state.cursor
-      state.destinations[state.cursor] = ""
 
       return {
         { SwitchModeCustom = "scp_enter_dest" },
@@ -338,10 +337,6 @@ local function setup(args)
 
   xplr.fn.custom.scp.toggle_select_all = function(_)
     if count_destinations() == 0 then
-      for i, _ in ipairs(state.hosts) do
-        state.destinations[i] = ""
-      end
-
       return {
         { SwitchModeCustom = "scp_enter_common_dest" },
         { SetInputPrompt = "*:" },
