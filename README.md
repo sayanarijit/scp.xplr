@@ -53,3 +53,4 @@ Integrate xplr with scp
 
 - Send multiple files to multiple hosts
 - Reads ssh config to find predefined hosts
+- Toggle select all hosts using `ctrl-a`

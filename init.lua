@@ -149,6 +149,12 @@ local function setup(args)
             { SetInputPrompt = "[user@]host[:port]: " },
           },
         },
+        ["ctrl-a"] = {
+          help = "toggle select all",
+          messages = {
+            { CallLuaSilently = "custom.scp.toggle_select_all" },
+          },
+        },
         enter = {
           help = "send",
           messages = {
@@ -236,6 +242,7 @@ local function setup(args)
           },
         },
         enter = {
+          help = "submit",
           messages = {
             { CallLuaSilently = "custom.scp.update_dest" },
           },
@@ -247,6 +254,15 @@ local function setup(args)
         },
       },
     },
+  }
+
+  xplr.config.modes.custom.scp_enter_common_dest = deepcopy(
+    xplr.config.modes.custom.scp_enter_dest
+  )
+
+  xplr.config.modes.custom.scp_enter_common_dest.name = "enter common destination"
+  xplr.config.modes.custom.scp_enter_common_dest.key_bindings.on_key.enter.messages = {
+    { CallLuaSilently = "custom.scp.update_all_dest" },
   }
 
   xplr.fn.custom.scp = {}
@@ -321,9 +337,37 @@ local function setup(args)
     end
   end
 
+  xplr.fn.custom.scp.toggle_select_all = function(_)
+    if count_destinations() == 0 then
+      for i, _ in ipairs(state.hosts) do
+        state.destinations[i] = ""
+      end
+
+      return {
+        { SwitchModeCustom = "scp_enter_common_dest" },
+        { SetInputPrompt = "*:" },
+        { SetInputBuffer = "" },
+      }
+    else
+      state.destinations = {}
+    end
+  end
+
   xplr.fn.custom.scp.update_dest = function(app)
     local dest = app.input_buffer or ""
     state.destinations[state.cursor] = dest
+    return {
+      "PopMode",
+    }
+  end
+
+  xplr.fn.custom.scp.update_all_dest = function(app)
+    local dest = app.input_buffer or ""
+
+    for i, _ in ipairs(state.hosts) do
+      state.destinations[i] = dest
+    end
+
     return {
       "PopMode",
     }
