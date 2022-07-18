@@ -455,18 +455,18 @@ local function setup(args)
         os.execute(cmd)
       end
     end
-  end
 
-  if not args.keep_selection then
+    if not args.keep_selection then
+      return {
+        "UnSelectAll",
+        "PopMode",
+      }
+    end
+
     return {
-      "UnSelectAll",
       "PopMode",
     }
   end
-
-  return {
-    "PopMode",
-  }
 end
 
 return { setup = setup }
