@@ -1,13 +1,10 @@
-# xplr plugin template
+# scp.xplr
 
-Use this template to [write your own xplr plugin](https://arijitbasu.in/xplr/en/writing-plugins.html).
-
-> **NOTE:** The `src` directory is a symlink to `.` for compatibility reasons.
-> It may be removed in the future.
+Integrate xplr with scp
 
 ## Requirements
 
-- Some tool
+- scp
 
 ## Installation
 
@@ -29,24 +26,30 @@ Use this template to [write your own xplr plugin](https://arijitbasu.in/xplr/en/
   ```bash
   mkdir -p ~/.config/xplr/plugins
 
-  git clone https://github.com/{username}/{plugin}.xplr ~/.config/xplr/plugins/{plugin}
+  git clone https://github.com/sayanarijit/scp.xplr ~/.config/xplr/plugins/scp
   ```
 
 - Require the module in `~/.config/xplr/init.lua`
 
   ```lua
-  require("{plugin}").setup()
+  require("scp").setup()
 
   -- Or
 
-  require("{plugin}").setup{
-    mode = "action",
-    key = ":",
+  require("scp").setup{
+    mode = "selection_ops"  -- or `xplr.config.modes.builtin.selection_ops`
+    key = "S",
+    scp_command = "scp -r",
+    non_interactive = false,
+    keep_selection = false,
   }
 
-  -- Type `::` and enjoy.
+  -- Type `:sS` and send the selected files.
+  -- Make sure `~/.ssh/config` or `/etc/ssh/ssh_config` is updated.
+  -- Else you'll need to enter each host manually.
   ```
 
 ## Features
 
-- Some cool feature
+- Send multiple files to multiple hosts
+- Reads ssh config to find predefined hosts
