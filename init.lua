@@ -192,7 +192,6 @@ local function setup(args)
         enter = {
           messages = {
             { CallLuaSilently = "custom.scp.add_host" },
-            "PopMode",
           },
         },
         esc = {
@@ -374,14 +373,19 @@ local function setup(args)
   end
 
   xplr.fn.custom.scp.add_host = function(app)
-    if not app.input_buffer or #app.input_buffer == 0 then
+    if app.input_buffer and #app.input_buffer ~= 0 then
+      table.insert(state.hosts, app.input_buffer)
+      state.cursor = #state.hosts
+
       return {
-        { LogError = "invalid host" },
+        "PopMode",
+        { CallLuaSilently = "custom.scp.toggle_select" },
+      }
+    else
+      return {
+        "PopMode",
       }
     end
-
-    table.insert(state.hosts, app.input_buffer)
-    state.cursor = #state.hosts
   end
 
   xplr.fn.custom.scp.prev_value = function(_)
