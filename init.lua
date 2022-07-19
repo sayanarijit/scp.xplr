@@ -158,7 +158,7 @@ local function setup(args)
           messages = {
             { SwitchModeCustom = "scp_add_host" },
             { SetInputBuffer = "" },
-            { SetInputPrompt = "[user@]host[:port]: " },
+            { SetInputPrompt = "[user@]host: " },
           },
         },
         ["ctrl-a"] = {
