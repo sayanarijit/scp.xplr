@@ -308,6 +308,12 @@ local function setup(args)
             "PopMode",
           },
         },
+        tab = {
+          help = "try complete",
+          messages = {
+            { CallLuaSilently = "builtin.try_complete_path" },
+          },
+        },
         ["ctrl-c"] = {
           messages = {
             "Terminate",
