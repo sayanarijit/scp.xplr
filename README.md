@@ -17,7 +17,7 @@ https://user-images.githubusercontent.com/11632726/179600312-845a698d-2c68-4646-
   ```lua
   local home = os.getenv("HOME")
   package.path = home
-    .. "/.config/xplr/plugins/?/src/init.lua;"
+    .. "/.config/xplr/plugins/?/init.lua;"
     .. home
     .. "/.config/xplr/plugins/?.lua;"
     .. package.path
